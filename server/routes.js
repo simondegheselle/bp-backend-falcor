@@ -1,23 +1,9 @@
-import mongoose from 'mongoose';
-
-mongoose.connect('mongodb://localhost/conduit');
-
-
-var ArticleSchema = new mongoose.Schema({
-  slug: {type: String, lowercase: true, unique: true},
-  title: String,
-  description: String,
-  body: String,
-  favoritesCount: {type: Number, default: 0},
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-  tagList: [{ type: String }],
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-}, {timestamps: true});
-
-
-const Article = mongoose.model('Article', ArticleSchema, 'articles');
+import configMongoose from './config-mongoose';
+import loginRoutes from './login-routes';
+const Article = configMongoose.Article;
 
 const PublishingAppRoutes = [
+  ...loginRoutes,
   {
     route: 'articles.length',
     get: () => Article.count({}, (err, count) => count)
