@@ -1,21 +1,61 @@
 <html>
 <head>
-    <script src="/node_modules/falcor/dist/falcor.browser.js">
+    <script src="//netflix.github.io/falcor/build/falcor.browser.js">
     </script>
     <script>
         //create model:
         var model = new falcor.Model({
-            source: new falcor.HttpDataSource('/model.json')
-        });
+          source: new falcor.HttpDataSource('/model.json',
+            {
+              // Options here
+               headers: {
+                   // Any headers here
+                   'Authorization': `Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5MzgwNzZhN2U0MjI5YWUzMDRkYTcyMiIsInVzZXJuYW1lIjoic2ltb25kZWdoZXNlbGxlIiwiZXhwIjoxNTA2ODczMzg5LCJpYXQiOjE1MDE2ODkzODl9.9dOdlok6-Rn1j3ulTAX4L4dKi0zfJ8mVlEsXykiXV6Y` // JWT
+               },
+               withCredentials: true, // Cookies
+               crossDomain: true // CORS
+            })
+        }).batch();
+
         //logging:
         var log = console.log.bind(console);
         var jlog = function(x) { console.log(JSON.stringify(x, null, 3)); };
         var jerror = function(x) { console.error(JSON.stringify(x, null, 3)); };
 
-        //examples:
-        model.get('articles.length').then(function (data) {
-          console.log(data);
-        });
+        // Get article by slug
+        //model.get('article[0]').then(jlog, jerror);
+
+        // Get multiple article's title
+        //model.get('articles[0..19]["title", "body", "description"]').then(jlog, jerror)
+        //model.get('articles[19]["body", "createdAt"]').then(jlog, jerror)
+        model.get('articles[19]["title", "body", "createdAt"]', 'articles[19].comments[0..9]["body", "createdAt"]').then(jlog, jerror)
+        //model.get('articles[19].comments.length').then(jlog, jerror)
+
+        //model.call(['article["5988fbd593d1910010797f10"].comments'], [{slug: 'graphql-vs-rest'}], [['title'], ['body']]).then(jlog, jerror);
+
+        // model.get('articles["5989d10e990bec1000f77975"].comments').then(jlog, jerror);
+        //model.call('articles[0..19]["title"]').then(jlog, jerror)
+
+        // Create new article
+        // model.call('articles.create', [{title: 'falcor-test', description: 'This is a default description', body: 'This is a default body'}]).then(jlog, jerror)
+
+        // Delete article
+        // model.call('articles.delete', [{id: '5986ea99e069ae7a68855217'}]).then(jlog, jerror)
+
+        // Update article
+        // model.call('articles.update', [{id: '5986ee0e0002ae7b17a96916', description: 'This is an updated description'}]).then(jlog, jerror)
+
+
+        // Get article by id
+        // model.get('commentsById["59830d4419daa1c7346b3860"]["_id","body"]').then(jlog, jerror);
+
+        // Create comment
+        // model.call('comments.create', [{articleId: '598434bc5c1e323e47333b1d', body: 'This is a new comment'}]).then(jlog, jerror)
+
+        // Delete comment
+        // model.call('comments.delete', [{id: '59870be44fa9ea803cd30b48'}]).then(jlog, jerror)
+
+
         // model.get('genrelist[0].name').then(jlog, jerror)
         // model.get('titlesById[-1]["userRating", "name"]').then(jlog, jerror)
         // model.setValue('titlesById[9].userRating', 9).then(jlog, jerror)
@@ -54,7 +94,6 @@
         // model.get('genrelist.myList.titles.length').then(jlog, jerror)
     </script>
 
-    <script src="http://localhost:35729/livereload.js?snipver=1"></script>
 </head>
 <body>
 </body>
