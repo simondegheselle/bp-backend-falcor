@@ -1,14 +1,12 @@
 var mongoose = require('mongoose');
 const Article = mongoose.model('Article');
-var Promise = require('promise');
-
 var jsonGraph = require('falcor-json-graph');
 
 var $ref = jsonGraph.ref;
 var $error = jsonGraph.error;
 
 
-import ArticleService from '../services/articles';
+const ArticleService = require('../services/articles');
 const articleService = new ArticleService();
 
 const ArticleRoutes = [{
@@ -36,15 +34,15 @@ const ArticleRoutes = [{
     }
   },
   {
-    route: 'articles[{integers}]',
-    get: (pathSet) => {
-      let articlesIndex = pathSet[1];
-      let params = {};
+    route: 'articles[{integers:articleIndices}]',
+    call: (pathSet, args) => {
+      let articlesIndices = pathSet.articleIndices;
+      let params = args[0];
 
       return articleService.getAll(params).then(function(articles) {
         let results = [];
 
-        articlesIndex.forEach((index) => {
+        articlesIndices.forEach((index) => {
           let mongoId = String(articles[index]['_id']);
           let articleRef = $ref(['articlesById', mongoId]);
 
@@ -61,10 +59,10 @@ const ArticleRoutes = [{
     }
   },
   {
-    route: "articlesById[{keys}]['title', 'description', 'body', 'comments']",
+    route: "articlesById[{keys:ids}]['title', 'description', 'body', 'comments']",
     get: function(pathSet) {
       let subSelect = pathSet[2];
-      let ids = pathSet[1];
+      let ids = pathSet.ids;
       return Article.find({
         '_id': {
           $in: ids
@@ -138,4 +136,4 @@ const ArticleRoutes = [{
   },
 ];
 
-export default ArticleRoutes;
+module.exports = ArticleRoutes;

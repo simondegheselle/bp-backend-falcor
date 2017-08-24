@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 let instance = null;
 
@@ -25,4 +25,4 @@ class SessionService {
   }
 };
 
-export default SessionService;
+module.exports = SessionService;

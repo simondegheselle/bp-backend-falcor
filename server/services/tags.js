@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var Article = mongoose.model('Article');
+const mongoose = require('mongoose');
+const Article = mongoose.model('Article');
 
 let instance = null;
 
@@ -18,4 +18,4 @@ class TagRepository {
   }
 }
 
-export default TagRepository;
+module.exports = TagRepository;

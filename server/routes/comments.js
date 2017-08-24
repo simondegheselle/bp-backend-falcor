@@ -1,18 +1,15 @@
-var mongoose = require('mongoose');
-var jsonGraph = require('falcor-json-graph');
+const mongoose = require('mongoose');
+const jsonGraph = require('falcor-json-graph');
 const Comment = mongoose.model('Comment');
-var Promise = require('promise');
+const CommentService = require('../services/comments');
+const ArticleService = require('../services/articles');
 
+const $ref = jsonGraph.ref;
+const $error = jsonGraph.error;
+const $attom = jsonGraph.attom;
 
-var $ref = jsonGraph.ref;
-var $error = jsonGraph.error;
-var $attom = jsonGraph.attom;
-
-import CommentService from '../services/comments';
 const commentService = new CommentService();
-import ArticleService from '../services/articles';
 const articleService = new ArticleService();
-
 
 const CommentRoutes = [
   {
@@ -147,4 +144,4 @@ const CommentRoutes = [
   },
 ];
 
-export default CommentRoutes;
+module.exports = CommentRoutes;

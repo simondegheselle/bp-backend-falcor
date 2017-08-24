@@ -7,16 +7,14 @@ var express = require('express'),
     mongoose = require('mongoose'),
     responseTime = require('response-time');
 
-    // Import all models
-    import './models/User';
-    import './models/Article';
-    import './models/Comment';
+    // Import all mongoose models
+    require('./models/User');
+    require('./models/Article');
+    require('./models/Comment');
 
-    import SessionService from './services/session';
-
-    // require('./config/passport');
-
-    import routes from './routes';
+    const SessionService = require('./services/session');
+    const routes = require('./routes');
+    const auth = require('./auth');
 
     const app = express();
 
@@ -26,12 +24,10 @@ var express = require('express'),
     // will allow you to post usernames and passwords to the backend
     app.use(bodyParser.urlencoded({extended: false}));
 
-    const auth = require('./auth');
-
     app.use('/model.json', auth);
 
-
-    app.use(responseTime())
+    // This module calculates the server latency
+    app.use(responseTime());
 
     app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 
@@ -40,17 +36,6 @@ var express = require('express'),
         sessionService.setCurrentUser(req.payload.id);
       }
 
-
-      /* res.on('finish', afterResponse);
-      res.on('close', afterResponse);
-
-      let startTime = new Date().getTime();
-
-      function afterResponse() {
-        let endTime = new Date().getTime();
-        console.log('time: ' + (endTime - startTime));
-      }*/
-
       return new falcorRouter(routes);
     }));
 
@@ -58,9 +43,7 @@ var express = require('express'),
     app.use(express.static('.'));
 
     var mongoURI = 'mongodb://simondegheselle:graphql-falcor@ds121212.mlab.com:21212/graphql-falcor'
-    // var mongoURI = 'mongodb://db:27017/conduit'
     var MongoDB = mongoose.connect(mongoURI).connection;
-    console.log(mongoURI);
 
     MongoDB.on('error', function(err) { console.log(err.message); });
     MongoDB.once('open', function() {

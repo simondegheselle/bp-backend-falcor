@@ -1,2 +1,13 @@
 node_modules/
 .DS_Store
+
+backend-falcor.aux
+backend-falcor.log
+backend-falcor.pdf
+backend-falcor.synctex.gz
+backend-falcor.tex
+code2tex.py
+commando.txt
+convert_all.py
+
+.idea/

@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Article = mongoose.model('Article');
 const Comment = mongoose.model('Comment');
 const User = mongoose.model('User');
-import ArticleService from './articles';
-import SessionService from './session';
+const ArticleService = require('./articles');
+const SessionService = require('./session');
 
 let instance = null;
 
@@ -85,6 +85,15 @@ class CommentService {
     })
   }
 
+  getById(id) {
+    return Comment.findById(id).then(function(comment) {
+      if (!comment) {
+        throw new Error('No comment entry found');
+      }
+      return comment;
+    });
+  }
+
   getAll(args, req) {
     return this.articleRepo.getArticle(args).then(function(article) {
       return Comment.find({ article: article._id }).populate('author').then(function(comments) {
@@ -94,4 +103,4 @@ class CommentService {
   }
 };
 
-export default CommentService;
+module.exports = CommentService;

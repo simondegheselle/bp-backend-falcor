@@ -26,9 +26,11 @@
         //model.get('article[0]').then(jlog, jerror);
 
         // Get multiple article's title
-        //model.get('articles[0..19]["title", "body", "description"]').then(jlog, jerror)
+        model.call('articles[0..19]', [{}], [['title'], ['body']]).then(jlog, jerror)
+
+
         //model.get('articles[19]["body", "createdAt"]').then(jlog, jerror)
-        model.get('articles[19]["title", "body", "createdAt"]', 'articles[19].comments[0..9]["body", "createdAt"]').then(jlog, jerror)
+        //model.get('articles[19]["title", "body", "createdAt"]', 'articles[19].comments[0..9]["body", "createdAt"]').then(jlog, jerror)
         //model.get('articles[19].comments.length').then(jlog, jerror)
 
         //model.call(['article["5988fbd593d1910010797f10"].comments'], [{slug: 'graphql-vs-rest'}], [['title'], ['body']]).then(jlog, jerror);

@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Article = mongoose.model('Article');
-var User = mongoose.model('User');
+const mongoose = require('mongoose');
+const Article = mongoose.model('Article');
+const User = mongoose.model('User');
 
-import SessionService from './session';
+const SessionService = require('./session');
 
 let instance = null;
 
@@ -18,7 +18,6 @@ class ArticleService {
   }
 
   getById(id) {
-    console.log(id);
     return Article.findById(id  )
       .populate('author')
       .then(function(article) {
@@ -234,4 +233,4 @@ class ArticleService {
   }
 };
 
-export default ArticleService;
+module.exports = ArticleService;
